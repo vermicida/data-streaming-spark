@@ -1,4 +1,6 @@
-# San Francisco crime incidents with Apache Spark Structured Streaming
+# San Francisco crime incidents
+
+## Using Apache Spark Structured Streaming
 
 TBD
 
@@ -23,8 +25,18 @@ This tree shows the repository structure.
 
 ```
 .
-├── spark
-│   └── Dockerfile
+├── docker
+│   ├── producer
+│   │   └── Dockerfile
+│   └── spark
+│       └── Dockerfile
+├── images
+│   ├── architecture.png
+│   ├── iterm.jpg
+│   ├── query.png
+│   ├── spark-job-dag.png
+│   ├── spark-jobs.png
+│   └── spark-nodes.png
 ├── src
 │   ├── config
 │   │   ├── config.ini
@@ -75,6 +87,8 @@ We need multiple terminal sessions in order to run the project:
 - A session to run the simulator that produces events randomly
 - A session to run the server that consumes these events
 
+<img src="images/architecture.png" width="550" alt="Architecture">
+
 #### Terminal 1: Architecture<a name="terminal-1-architecture"></a>
 
 Open a new terminal session, or use the one you just used to clone the respository. From the root folder of the project, run the following command:
@@ -97,7 +111,27 @@ TBD
 
 ## How to use<a name="how-to-use"></a>
 
-TBD
+<img src="images/iterm.jpg" width="880" alt="iTerm">
+
+Once the consumer is running, we can navigate `http://localhost:8080` in a web browser to see Spark UI. This console shows tons of info regarding the jobs running in the cluster.
+
+Here you can check out the nodes of the cluster:
+
+<img src="images/spark-nodes.png" width="880" alt="Spark nodes">
+
+Click on an application to see their jobs:
+
+<img src="images/spark-jobs.png" width="880" alt="Jobs">
+
+Also you can get details of every single job, such as its DAG or its logs:
+
+<img src="images/spark-job-dag.png" width="880" alt="Job DAG">
+
+And last but not least, a closer view of the terminal where Spark prints the aggregate table we're building, updated after every batch processed.
+
+<img src="images/query.png" width="320" alt="Job DAG">
+
+Everything works like a charm!
 
 ### Stopping the solution<a name="stopping-the-solution"></a>
 
