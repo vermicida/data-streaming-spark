@@ -70,7 +70,7 @@ We need multiple terminal sessions in order to run the project:
 
 - A session to to run the architecture of the solution, consisting in:
   - A Zookeeper ensemble
-  - A 3-node Apache Kafka cluster
+  - A 2-node Apache Kafka cluster
   - A 3-node Apache Spark cluster
 - A session to run the simulator that produces events randomly
 - A session to run the server that consumes these events

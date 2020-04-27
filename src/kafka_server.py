@@ -12,7 +12,7 @@ def run_producer():
     options = {
         'input_file': DataConfig.sfdpd_calls,
         'topic': KafkaConfig.topic,
-        'bootstrap_servers': KafkaConfig.external_servers,
+        'bootstrap_servers': KafkaConfig.internal_servers,
         'client_id': KafkaConfig.client_id
     }
 

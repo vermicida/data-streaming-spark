@@ -1,4 +1,11 @@
-FROM debian:stretch
+# Based on gettyimages/spark
+# See: https://hub.docker.com/r/gettyimages/spark/dockerfile
+
+# ---- #
+# Base #
+# ---- #
+
+FROM debian:stretch AS base
 
 RUN apt-get update && \
     apt-get install -y locales && \
@@ -24,14 +31,28 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+# See: http://blog.stuart.axelbrooke.com/python-3-on-spark-return-of-the-pythonhashseed
+
 ENV PYTHONHASHSEED 0
 ENV PYTHONIOENCODING UTF-8
 ENV PIP_DISABLE_PIP_VERSION_CHECK 1
+
+# ---- #
+# Java #
+# ---- #
+
+FROM base AS java
 
 RUN apt-get update && \
     apt-get install -y openjdk-8-jre && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+# ------ #
+# Hadoop #
+# ------ #
+
+FROM java AS hadoop
 
 ENV HADOOP_VERSION 3.2.1
 ENV HADOOP_HOME /usr/hadoop-$HADOOP_VERSION
@@ -44,6 +65,12 @@ RUN curl -sL --retry 3 \
     | tar -x -C /usr/ && \
     rm -rf $HADOOP_HOME/share/doc && \
     chown -R root:root $HADOOP_HOME
+
+# ----- #
+# Spark #
+# ----- #
+
+FROM hadoop AS spark
 
 ENV SPARK_VERSION 2.4.5
 ENV SPARK_PACKAGE spark-${SPARK_VERSION}-bin-without-hadoop
@@ -66,4 +93,5 @@ RUN curl -sLO --retry 3 \
     mv kafka-clients-2.5.0.jar $SPARK_HOME/jars
 
 WORKDIR $SPARK_HOME
+
 CMD ["bin/spark-class", "org.apache.spark.deploy.master.Master"]

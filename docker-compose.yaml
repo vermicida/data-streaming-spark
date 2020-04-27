@@ -48,7 +48,7 @@ services:
 
   spark_master:
     build:
-      context: ./spark
+      context: ./docker/spark
     command: bin/spark-class org.apache.spark.deploy.master.Master -h master
     hostname: master
     container_name: spark_master
@@ -77,7 +77,7 @@ services:
 
   spark_worker1:
     build:
-      context: ./spark
+      context: ./docker/spark
     command: bin/spark-class org.apache.spark.deploy.worker.Worker spark://master:7077
     hostname: worker1
     container_name: spark_worker1
@@ -105,7 +105,7 @@ services:
 
   spark_worker2:
     build:
-      context: ./spark
+      context: ./docker/spark
     command: bin/spark-class org.apache.spark.deploy.worker.Worker spark://master:7077
     hostname: worker2
     container_name: spark_worker2
@@ -130,6 +130,21 @@ services:
       - sfpdnet
     depends_on:
       - spark_master
+
+  producer:
+    build:
+      context: ./docker/producer
+      dockerfile: Dockerfile
+    hostname: producer
+    container_name: producer
+    volumes:
+      - ./src:/opt/app:ro
+    networks:
+      - sfpdnet
+    depends_on:
+      - zookeeper
+      - kafka0
+      - kafka1
 
 networks:
 

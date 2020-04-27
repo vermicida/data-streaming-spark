@@ -1,7 +1,3 @@
-#! /bin/bash
+#! /bin/sh
 
-source ./venv/bin/activate
-cd ./src
-python ./kafka_server.py
-cd ..
-deactivate
+docker exec -it producer python kafka_server.py
