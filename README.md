@@ -1,8 +1,6 @@
-# San Francisco crime incidents
+# SF Crime Statistics with Spark Streaming
 
-## Using Apache Spark Structured Streaming
-
-TBD
+In this project, we will be provided with a real-world dataset, extracted from Kaggle, on San Francisco crime incidents, and you will provide statistical analyses of the data using Apache Spark Structured Streaming.
 
 ## Table of contents
 
@@ -87,7 +85,7 @@ We need multiple terminal sessions in order to run the project:
 - A session to run the simulator that produces events randomly
 - A session to run the server that consumes these events
 
-<img src="images/architecture.png" width="550" alt="Architecture">
+<img src="images/architecture.png" width="820" alt="Architecture">
 
 #### Terminal 1: Architecture<a name="terminal-1-architecture"></a>
 
