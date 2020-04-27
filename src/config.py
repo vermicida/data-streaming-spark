@@ -25,6 +25,10 @@ class KafkaConfig:
 class SparkConfig:
     master = _config.get('spark', 'master')
     app_name = _config.get('spark', 'app-name')
+    ui_port = _config.get('spark', 'ui-port')
+    starting_offset = _config.get('spark', 'starting-offset')
+    max_offset = _config.get('spark', 'max-offset')
+    stop_gracefully = _config.get('spark', 'stop-gracefully')
 
 
 class DataConfig:

@@ -69,6 +69,7 @@ services:
       - 6066:6066
       - 7077:7077
       - 8080:8080
+      - 3000:3000
     volumes:
       - ./src:/opt/app:ro
     networks:

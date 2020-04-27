@@ -1,5 +1,7 @@
 #! /bin/bash
 
-cd ./src/producer
+source ./venv/bin/activate
+cd ./src
 python ./kafka_server.py
-cd ../..
+cd ..
+deactivate
