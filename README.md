@@ -113,7 +113,7 @@ The command is wrapped in a script file to ease the task. Open a new terminal se
 $ ./run_producer.sh
 ```
 
-It instantiate a `KafkaProducer` that will be pushing a new message to the Kafka's cluster every 2 seconds.
+It instantiate a `KafkaProducer` that will be pushing a new message to the Kafka's cluster every 2 seconds (can be configured).
 
 ### Terminal 3: Consumer<a name="terminal-3-consumer"></a>
 
@@ -131,7 +131,7 @@ In a few seconds, the consumer application will start processing the messages fr
 
 Below are some screenshots of the application and its monitoring.
 
-These are the terminal session:
+These are the terminal sessions:
 
 - Upper left: Terminal 1, `docker-compose` task.
 - Lower left: Terminal 2, `run_producer.sh` script.
@@ -253,11 +253,11 @@ The table below resumes some of the properties that can be tweaked for a better 
 
 | Property | Meaning |
 |:-|:-|
-| spark.driver.cores | Number of cores to use for the driver process, only in cluster mode |
-| spark.driver.memory | Amount of memory to use for the driver process |
-| spark.executor.cores | The number of cores to use on each executor |
-| spark.executor.memory | Amount of memory to use per executor process |
-| spark.streaming.kafka.maxRatePerPartition | Maximum rate (number of records per second) at which data will be read from each Kafka partition when using the new Kafka direct stream API |
+| `spark.driver.cores` | Number of cores to use for the driver process, only in cluster mode |
+| `spark.driver.memory` | Amount of memory to use for the driver process |
+| `spark.executor.cores` | The number of cores to use on each executor |
+| `spark.executor.memory` | Amount of memory to use per executor process |
+| `spark.streaming.kafka.maxRatePerPartition` | Maximum rate (number of records per second) at which data will be read from each Kafka partition when using the new Kafka direct stream API |
 
 **2. What were the 2-3 most efficient SparkSession property key/value pairs? Through testing multiple variations on values, how can you tell these were the most optimal?**
 
