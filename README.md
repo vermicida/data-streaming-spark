@@ -13,6 +13,7 @@ In this project, we will be provided with a real-world dataset, extracted from K
   - [Terminal 3: Consumer](#terminal-3-consumer)
   - [Screenshots](#screenshots)
 - [Stopping the solution](#stopping-the-solution)
+- [Questions](#questions)
 
 ---
 
@@ -130,7 +131,13 @@ In a few seconds, the consumer application will start processing the messages fr
 
 Below are some screenshots of the application and its monitoring.
 
-<img src="images/iterm.jpg" width="880" alt="iTerm">
+These are the terminal session:
+
+- Upper left: Terminal 1, `docker-compose` task.
+- Lower left: Terminal 2, `run_producer.sh` script.
+- Right: Terminal 3, `run_consumer.sh` script.
+
+<img src="images/iterm.png" width="880" alt="iTerm">
 
 Once the consumer is running, we can navigate `http://localhost:8080` in a web browser to see Spark UI. This console shows tons of info regarding the jobs running in the cluster.
 
@@ -146,9 +153,77 @@ Also you can get details of every single job, such as its DAG or its logs:
 
 <img src="images/spark-job-dag.png" width="880" alt="Job DAG">
 
-And last but not least, a closer view of the terminal where Spark prints the aggregate table we're building, updated after every batch processed.
+A closer view of the terminal where Spark prints the aggregate table we're building, updated after every batch processed.
 
-<img src="images/query.png" width="320" alt="Job DAG">
+<img src="images/query.png" width="320" alt="Query">
+
+And last but not least, the JSON object representing the progress report:
+
+```json
+{
+  "id" : "e292e447-66f3-43d2-88ec-6dcfef0d0b09",
+  "runId" : "118b6a03-8b0a-4ac2-b645-7c79692b20af",
+  "name" : null,
+  "timestamp" : "2020-04-28T22:54:38.952Z",
+  "batchId" : 4,
+  "numInputRows" : 30,
+  "inputRowsPerSecond" : 0.49206948021060576,
+  "processedRowsPerSecond" : 0.5643234702131261,
+  "durationMs" : {
+    "addBatch" : 52778,
+    "getBatch" : 3,
+    "getEndOffset" : 1,
+    "queryPlanning" : 109,
+    "setOffsetRange" : 14,
+    "triggerExecution" : 53161,
+    "walCommit" : 99
+  },
+  "eventTime" : {
+    "avg" : "2018-12-31T21:51:34.000Z",
+    "max" : "2018-12-31T21:59:00.000Z",
+    "min" : "2018-12-31T21:41:00.000Z",
+    "watermark" : "2018-12-31T23:52:00.000Z"
+  },
+  "stateOperators" : [ {
+    "numRowsTotal" : 84,
+    "numRowsUpdated" : 34,
+    "memoryUsedBytes" : 144380,
+    "customMetrics" : {
+      "loadedMapCacheHitCount" : 6000,
+      "loadedMapCacheMissCount" : 0,
+      "stateOnCurrentVersionSizeBytes" : 50980
+    }
+  }, {
+    "numRowsTotal" : 160,
+    "numRowsUpdated" : 30,
+    "memoryUsedBytes" : 119812,
+    "customMetrics" : {
+      "loadedMapCacheHitCount" : 800,
+      "loadedMapCacheMissCount" : 0,
+      "stateOnCurrentVersionSizeBytes" : 52700
+    }
+  } ],
+  "sources" : [ {
+    "description" : "KafkaV2[Subscribe[san-francisco.police-department.calls]]",
+    "startOffset" : {
+      "san-francisco.police-department.calls" : {
+        "0" : 134
+      }
+    },
+    "endOffset" : {
+      "san-francisco.police-department.calls" : {
+        "0" : 164
+      }
+    },
+    "numInputRows" : 30,
+    "inputRowsPerSecond" : 0.49206948021060576,
+    "processedRowsPerSecond" : 0.5643234702131261
+  } ],
+  "sink" : {
+    "description" : "org.apache.spark.sql.execution.streaming.ConsoleSinkProvider@5880d11"
+  }
+}
+```
 
 Everything works like a charm!
 
@@ -165,3 +240,30 @@ To stop all the running processes we will go in reverse order:
 ```bash
 $ docker-compose down
 ```
+
+---
+
+## Questions<a name="questions"></a>
+
+These are my answers to the Udacity's questions:
+
+**1. How did changing values on the SparkSession property parameters affect the throughput and latency of the data?**
+
+The table below resumes some of the properties that can be tweaked for a better the throughput and latency:
+
+| Property | Meaning |
+|:-|:-|
+| spark.driver.cores | Number of cores to use for the driver process, only in cluster mode |
+| spark.driver.memory | Amount of memory to use for the driver process |
+| spark.executor.cores | The number of cores to use on each executor |
+| spark.executor.memory | Amount of memory to use per executor process |
+| spark.streaming.kafka.maxRatePerPartition | Maximum rate (number of records per second) at which data will be read from each Kafka partition when using the new Kafka direct stream API |
+
+**2. What were the 2-3 most efficient SparkSession property key/value pairs? Through testing multiple variations on values, how can you tell these were the most optimal?**
+
+I don't have a magic number, but these are the values I used:
+
+| Property | Meaning | Value |
+|:-|:-|:-|
+| `spark.default.parallelism` | Default number of partitions in RDDs returned by transformations like join, reduceByKey, and parallelize when not set by user | 4 |
+| `spark.streaming.kafka.maxRatePerPartition` | Maximum rate (number of records per second) at which data will be read from each Kafka partition when using the new Kafka direct stream API | N/A (producer is pushing a message every 2 seconds) |
